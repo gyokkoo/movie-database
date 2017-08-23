@@ -83,6 +83,7 @@ export default class AddMovie extends React.Component {
       this.setState(prevState => ({
         genres: Helpers.removeFromArray(genreValue, prevState.genres)
       }))
+      console.log()
     }
   }
 

@@ -13,7 +13,7 @@ const routes = require('../../client/routes');
 
 module.exports = {
     attachMiddleWares: (app) => {
-        app.set('port', process.env.PORT || 3000);
+        app.set('port', process.env.PORT || 3001);
         app.use(logger('dev'));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: false}));
