@@ -71,7 +71,7 @@ class UserProfile extends React.Component {
           </div>
           <div className='pull-right btn-group'>
             <a className='btn btn-primary'>
-              {this.state.showRatedMovies ? 'Hide' : 'Rated movies'}
+              {this.state.showRatedMovies ? 'Hide ' : 'Rated movies'}
             </a>
           </div>
         </div>

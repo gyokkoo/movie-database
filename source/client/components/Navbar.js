@@ -1,29 +1,48 @@
 import React from 'react'
 import { Link } from 'react-router'
 import $ from 'jquery'
+
+import NavbarActions from '../actions/NavbarActions'
+import NavbarStore from '../stores/NavbarStore'
+
 import NavbarUserMenu from './sub-components/NavbarUserMenu'
 
 class Navbar extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      ajaxAnimationClass: '',
-      loggedInUserId: '',
-      userData: ''
-    }
+    this.state = NavbarStore.getState()
+    // this.state = {
+    //   ajaxAnimationClass: '',
+    //   loggedInUserId: '',
+    //   userData: ''
+    // }
+
+    this.onChange = this.onChange.bind(this)
+  }
+
+  onChange (state) {
+    this.setState(state)
   }
 
   componentDidMount () {
-    $(document).ajaxStart(() => {
-      this.setState({
-        ajaxAnimationClass: 'fadeIn'
-      })
-    })
-    $(document).ajaxComplete(() => {
-      this.setState({
-        ajaxAnimationClass: 'fadeOut'
-      })
-    })
+    NavbarStore.listen(this.onChange)
+
+    $(document).ajaxStart(() => NavbarActions.updateAjaxAnimation('fadeIn'))
+    $(document).ajaxComplete(() => NavbarActions.updateAjaxAnimation('fadeOut'))
+    // $(document).ajaxStart(() => {
+    //   this.setState({
+    //     ajaxAnimationClass: 'fadeIn'
+    //   })
+    // })
+    // $(document).ajaxComplete(() => {
+    //   this.setState({
+    //     ajaxAnimationClass: 'fadeOut'
+    //   })
+    // })
+  }
+
+  ComponentWillUnmount () {
+    NavbarStore.unlisten(this.onChange)
   }
 
   render () {

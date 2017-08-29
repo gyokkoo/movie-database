@@ -1,23 +1,31 @@
 import React from 'react'
 import { Link } from 'react-router'
 import $ from 'jquery'
+import FooterStore from '../stores/FooterStore'
+import FooterActions from '../actions/FooterActions'
 
 class Footer extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
-      mostRecentMovies: []
-    }
 
-    this.getFiveRecentMovies = this.getFiveRecentMovies.bind(this)
+    this.state = FooterStore.getState()
+
+    this.onChange = this.onChange.bind(this)
+  }
+
+  onChange (state) {
+    this.setState(state)
   }
 
   componentDidMount () {
-    this.getFiveRecentMovies()
-    this.interval = setInterval(() => this.getFiveRecentMovies(), 30000)
+    FooterStore.listen(this.onChange)
+
+    FooterActions.getFiveRecentMovies()
+    this.interval = setInterval(() => FooterActions.getFiveRecentMovies(), 30000)
   }
 
   componentWillUnmount () {
+    FooterStore.unlisten(this.onChange)
     clearInterval(this.interval)
   }
 
@@ -30,7 +38,7 @@ class Footer extends React.Component {
       .done(data => this.setState({
         mostRecentMovies: data
       }))
-      .fail(err => toastr.error(err.responseJSON.message))
+      .fail(err => window.toastr.error(err.responseJSON.message))
   }
   render () {
     let mostRecentMovies = this.state.mostRecentMovies.map(movie => {
